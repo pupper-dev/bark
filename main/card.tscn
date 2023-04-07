@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjsx4kebrledw"]
+
+[sub_resource type="GDScript" id="GDScript_uqi51"]
+script/source = "extends Panel
+
+@onready var label = $Label
+@export var uname : String
+@export var animSpeed : float = 1.5
+@onready var t : Tween = create_tween()
+
+func _ready():
+	label.text = uname
+	
+	resized.connect(onResized)
+	
+	gui_input.connect(func(event):
+		if event is InputEventMouseButton:
+			if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+				t = create_tween()
+				t.tween_property(self,'scale',Vector2(0,0),animSpeed)
+				var tmppos = position
+				t.parallel().tween_property(self, 'position', tmppos+(size*scale)/2,animSpeed)
+				t.parallel().tween_callback(func():
+					mouse_filter = Control.MOUSE_FILTER_IGNORE
+					)
+				t.tween_callback(func():
+					queue_free()
+					)
+				t.play()
+		)
+
+func _process(delta):
+	if t.is_running():
+		custom_minimum_size.y = size.x
+
+func onResized():
+	if size.x > 400:
+		size.x = 400
+
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_b70a2"]
+resource_local_to_scene = true
+font_size = 4
+
+[sub_resource type="GDScript" id="GDScript_464nx"]
+script/source = "extends Label
+
+func _process(delta):
+	label_settings.font_size = clamp(get_parent_area_size().x/16,16,32)
+"
+
+[node name="Panel" type="Panel"]
+custom_minimum_size = Vector2(150, 150)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
+script = SubResource("GDScript_uqi51")
+animSpeed = 0.25
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.15
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "name"
+label_settings = SubResource("LabelSettings_b70a2")
+vertical_alignment = 1
+script = SubResource("GDScript_464nx")

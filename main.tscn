@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://cskuxaxetwwq8"]
+
+[ext_resource type="PackedScene" uid="uid://wjt7p2roc2sr" path="res://main/friends.tscn" id="1_r2jfm"]
+[ext_resource type="Script" path="res://main.gd" id="1_sd8wb"]
+
+[node name="main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sd8wb")
+
+[node name="friends" parent="." instance=ExtResource("1_r2jfm")]
+layout_mode = 1

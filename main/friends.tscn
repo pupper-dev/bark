@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://wjt7p2roc2sr"]
+
+[sub_resource type="GDScript" id="GDScript_ypdj2"]
+script/source = "extends Control
+
+var card = preload(\"res://main/card.tscn\")
+var unames = [\"PixelPenguin\", \"SunnySparrow\", \"RainbowRaccoon\", \"ForestFalcon\", \"DiamondDragon\", \"ShadowShark\", \"IceImpala\", \"SnowySquirrel\", \"AquaAlpaca\", \"TropicalToucan\", \"ElectricEagle\", \"OceanOtter\", \"CrystalCat\", \"FlowerFox\", \"SilverSnake\", \"WildWolf\", \"GalacticGorilla\", \"RockyRhino\", \"MidnightMermaid\", \"GoldenGazelle\", \"MysticManta\", \"JungleJaguar\", \"DesertDolphin\", \"LunarLlama\", \"PolarPanther\", \"NeonNinja\", \"MoonMist\", \"MountainMoose\", \"FireFox\", \"ThunderTiger\", \"StarSwan\", \"GoldenGiraffe\", \"SapphireSaber\", \"RubyRaven\", \"OceanicOctopus\", \"CrimsonCobra\", \"NeonNebula\", \"ElectricEmu\", \"FrostyFalcon\", \"ThunderousTurtle\", \"MysticalMoose\", \"GalacticGazelle\", \"EmeraldEagle\", \"RainbowRaven\", \"AmberAlpaca\", \"BreezyButterfly\", \"CosmicCoyote\", \"DancingDolphin\", \"EnchantedElephant\", \"FuzzyFerret\", \"GlitteringGorilla\", \"HoneyedHorse\", \"IcyIguana\", \"JazzyJellyfish\", \"KaleidoscopeKangaroo\", \"LivelyLion\", \"MagicalMongoose\", \"NimbleNarwhal\", \"OceanicOwl\", \"PiratePanda\", \"QuicksilverQuail\", \"RadiantRabbit\", \"SillySeahorse\", \"TealTurtle\", \"UnicornUmbrella\", \"VibrantVulture\", \"WanderingWolf\", \"XenialXerus\", \"YellowYak\", \"ZealousZebra\", \"AstralArmadillo\", \"BlazingBear\", \"ChirpingChickadee\", \"DazzlingDeer\", \"EnthusiasticEmperor\", \"FlutteringFlamingo\", \"GracefulGazelle\", \"HootingHawk\", \"InquisitiveIbis\", \"JumpingJackrabbit\", \"KookyKitten\", \"LuminousLynx\", \"MajesticMarmot\", \"NappingNightingale\", \"OptimisticOcelot\", \"PrancingPony\", \"QuickQuetzal\", \"RadiantRaccoon\", \"SpiritedSwallow\", \"TriumphantTiger\", \"UnwaveringUnicorn\", \"VivaciousViper\"]
+@onready var grid_container = $ScrollContainer/GridContainer
+@onready var h_flow_container = $ScrollContainer/HFlowContainer
+
+func _ready():
+	for i in unames:
+		var tmp = card.instantiate()
+		tmp.uname = i
+		h_flow_container.add_child(tmp)
+
+func _process(delta):
+	grid_container.columns = size.x/150.0
+"
+
+[node name="friends" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ypdj2")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 4
+
+[node name="HFlowContainer" type="HFlowContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
