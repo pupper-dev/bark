@@ -1,0 +1,102 @@
+[gd_scene load_steps=4 format=3 uid="uid://cemjqn0aq30cx"]
+
+[ext_resource type="Texture2D" uid="uid://ddb21cw1bwrkd" path="res://assets/images/matrix-logo-white.svg" id="1_om8ig"]
+[ext_resource type="Texture2D" uid="uid://bmxlkl04syyfm" path="res://addons/vector/logo.svg" id="2_ijop2"]
+[ext_resource type="Texture2D" uid="uid://vhb17lce1ii8" path="res://assets/images/t_pupper.svg" id="3_w5lmm"]
+
+[node name="about" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "bark_v0.1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="LinkButton" type="LinkButton" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+uri = "https://matrix.org"
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer/LinkButton"]
+texture_filter = 3
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+texture = ExtResource("1_om8ig")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LinkButton2" type="LinkButton" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer/LinkButton2"]
+texture_filter = 3
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+texture = ExtResource("2_ijop2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LinkButton3" type="LinkButton" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+uri = "https://pupper.dev"
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer/LinkButton3"]
+texture_filter = 3
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+texture = ExtResource("3_w5lmm")
+expand_mode = 1
+stretch_mode = 5

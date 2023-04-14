@@ -1,9 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cskuxaxetwwq8"]
+[gd_scene load_steps=4 format=3 uid="uid://cskuxaxetwwq8"]
 
-[ext_resource type="PackedScene" uid="uid://wjt7p2roc2sr" path="res://main/friends.tscn" id="1_r2jfm"]
 [ext_resource type="Script" path="res://main.gd" id="1_sd8wb"]
+[ext_resource type="PackedScene" uid="uid://clhl25klpa7ba" path="res://main/user/login/login.tscn" id="2_25ou4"]
 
-[node name="main" type="Control"]
+[sub_resource type="GDScript" id="GDScript_h75kd"]
+script/source = "extends ColorRect
+
+func _ready():
+	var t = create_tween()
+	t.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO).tween_property(self,'color',Color(\"#40006b\"),4.0)
+	t.play()
+"
+
+[node name="main" type="Control" groups=["main"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,5 +21,23 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sd8wb")
 
-[node name="friends" parent="." instance=ExtResource("1_r2jfm")]
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = SubResource("GDScript_h75kd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="login" parent="." instance=ExtResource("2_25ou4")]
 layout_mode = 1
