@@ -51,3 +51,12 @@ I'm hoping to build a native Matrix client with some fun features and functional
 If Mastodon can become mostly mainstream, I believe that Matrix has the potential to become mainstream... but element is just not gonna cut it.
 
 
+### other platforms/tools/systems currently marked as targets for federation or at least minimal support:
+
+A list of things I want to add functionality into Godot/bark to support as extensively as possible.
+
+- [thirdroom](https://github.com/matrix-org/thirdroom/)
+- [all OMI extensions](https://github.com/omigroup)
+- [bitECS](https://github.com/NateTheGreatt/bitECS)
+- more...
+
