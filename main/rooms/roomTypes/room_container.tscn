@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b2jgxhntt8sb2"]
+
+[node name="roomContainer" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 3

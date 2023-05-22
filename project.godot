@@ -22,6 +22,7 @@ config/icon="res://assets/images/t_pupper.svg"
 
 Notify="*res://main/notify/notify.gd"
 Vector="*res://addons/vector/vector.gd"
+JsonViewerGlobals="*res://addons/json viewer/jsonViewerGlobals.gd"
 
 [display]
 
@@ -31,6 +32,11 @@ window/handheld/orientation=5
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg")
+
+[physics]
+
+2d/run_on_separate_thread=true
+3d/run_on_separate_thread=true
 
 [rendering]
 

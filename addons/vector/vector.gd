@@ -5,12 +5,10 @@ class_name vector
 extends Node
 
 # import scripts
-var user_script = preload("res://addons/vector/api_handlers/user.gd")
-var rooms_script = preload("res://addons/vector/api_handlers/rooms.gd")
+var api_script = preload("res://addons/vector/api.gd")
 
 # create vars for script objects
-var user_api = user_script.new()
-var rooms_api = rooms_script.new()
+var api = api_script.new()
 
 # other vars
 var client = HTTPClient.new()
@@ -18,13 +16,66 @@ var userToken = ""
 var base_url = ""
 var home_server = ""
 var headers = ["content-type: application/json"]
-var syncSince = ""
+var next_batch = ''
 var timeout = 3000
 var joinedRooms
 var userData : Dictionary = {}
 
 # matrix enums
 const PRESENCE = {"offline":"offline","online":"online","unavailable":"unavailable"}
+
+# signals
+signal user_logged_in
+signal got_joined_rooms
+signal got_room_state(data)
+signal update_room(data)
+signal synced(data)
+
+@onready var requestParent = get_tree().get_first_node_in_group("requestParent")
+
+func _ready():
+	api.user_logged_in.connect(func(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray):
+		var msg = body.get_string_from_ascii()
+		var msgJson : Dictionary = JSON.parse_string(msg)
+		if msgJson.has('errcode'):
+			Notify.sendNotification(msgJson.error)
+			if msgJson.has('retry_after_ms'):
+				Notify.sendNotification("Please try again after: "+str(msgJson.retry_after_ms/1000)+" seconds")
+			return null
+		userToken = msgJson.access_token
+		base_url = msgJson.well_known["m.homeserver"].base_url
+		userData['login'] = msgJson
+		userData['login']['home_server'] = home_server
+		saveUserDict()
+		if userToken != "":
+			headers.push_back("Authorization: Bearer {0}".format([userToken]))
+			user_logged_in.emit()
+			return true
+		else:
+			return false
+		)
+	api.got_joined_rooms.connect(func(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray):
+		var msg = body.get_string_from_ascii()
+		var msgJson = JSON.parse_string(msg)
+		joinedRooms = msgJson['joined_rooms']
+		userData['joined_rooms'] = msgJson['joined_rooms']
+		saveUserDict()
+		got_joined_rooms.emit()
+		)
+	api.got_room_state.connect(func(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray):
+		var msg = body.get_string_from_ascii()
+		var msgJson = JSON.parse_string(msg)
+		got_room_state.emit(msgJson)
+		)
+	api.synced.connect(func(result:int,response_code:int,header:PackedStringArray,body:PackedByteArray):
+		var msg = body.get_string_from_ascii()
+		var msgJson = JSON.parse_string(msg)
+		if msgJson.has('next_batch'):
+			next_batch = msgJson.next_batch
+			userData['next_batch'] = next_batch
+			saveUserDict()
+		synced.emit(msgJson)
+		)
 
 func connect_to_homeserver(homeServer:String = ""):
 	var homeserverurl = "https://{0}".format([
@@ -40,19 +91,13 @@ func connect_to_homeserver(homeServer:String = ""):
 	return response
 
 func login_username_password(homeserver:String,username:String,password:String):
-	await user_api.login_username_password(homeserver,username,password)
-	if userToken != "":
-		headers.push_back("Authorization: Bearer {0}".format([userToken]))
-		Notify.sendNotification("connecting to base_url")
-		while client.get_status() == client.STATUS_CONNECTING or client.get_status() == client.STATUS_RESOLVING:
-			Notify.sendNotification('waiting')
-			client.poll()
-		return true
-	else:
-		return false
+	var homeserverurl = "https://{0}".format([
+		userData["home_server"] if homeserver == "" and userData.has("home_server") else homeserver
+		])
+	api.login_username_password(homeserver,username,password)
 
 func get_joined_rooms():
-	joinedRooms = await user_api.get_joined_rooms()
+	api.get_joined_rooms()
 
 func readRequestBytes():
 	while client.get_status() == client.STATUS_REQUESTING:
@@ -73,8 +118,6 @@ func readRequestBytes():
 func saveUserDict():
 	var file = FileAccess.open("user://user.data",FileAccess.WRITE)
 	userData["home_server"] = home_server
-#	assert(userData.has('home_server'))
-#	assert(userData.has('login'), "userData dictionary doesn't have the login data")
 	var toStore = var_to_bytes(userData)
 	toStore.reverse()
 	file.store_var(toStore)
@@ -91,9 +134,11 @@ func readUserDict():
 			headers.push_back("Authorization: Bearer {0}".format([userToken]))
 			home_server = userData['login']['user_id'].split(':')[1]
 			base_url = userData['login']['well_known']['m.homeserver']['base_url']
-			var res = await connect_to_homeserver(home_server)
-			assert(res == OK)
-			assert(client.get_status() == HTTPClient.STATUS_CONNECTED)
+			print("baseurl: ",base_url)
+			if userData.has('next_batch'):
+				next_batch = userData.next_batch
+			if userData.has('joined_rooms'):
+				joinedRooms = userData.joined_rooms
 			return true
 	return false
 
@@ -107,3 +152,10 @@ func refresh_token(token:String):
 		var refreshedToken = JSON.parse_string(msg)
 	else:
 		printerr("Vector client not initialized yet")
+
+func sync():
+	var reqData = {}
+	print(next_batch)
+	if !next_batch.is_empty():
+		reqData['since'] = next_batch
+	api.sync(reqData)

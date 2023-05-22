@@ -1,32 +1,10 @@
 [gd_scene load_steps=8 format=3 uid="uid://clhl25klpa7ba"]
 
+[ext_resource type="Script" path="res://main/user/login/login.gd" id="1_gplff"]
 [ext_resource type="Texture2D" uid="uid://ddb21cw1bwrkd" path="res://assets/images/matrix-logo-white.svg" id="1_gs371"]
 [ext_resource type="Texture2D" uid="uid://bmxlkl04syyfm" path="res://addons/vector/logo.svg" id="2_vxvrh"]
 [ext_resource type="Texture2D" uid="uid://vhb17lce1ii8" path="res://assets/images/t_pupper.svg" id="3_v5och"]
 [ext_resource type="Shader" path="res://assets/bg.gdshader" id="4_i3fcb"]
-
-[sub_resource type="GDScript" id="GDScript_0i4cu"]
-script/source = "extends Control
-@onready var homeserver = $Panel/VBoxContainer/homeserver
-@onready var username = $Panel/VBoxContainer/username
-@onready var password = $Panel/VBoxContainer/password
-@onready var button = $Panel/VBoxContainer/Button
-
-func _ready():
-	button.pressed.connect(func():
-		button.disabled = true
-		homeserver.editable = false
-		username.editable = false
-		password.editable = false
-		if await Vector.login_username_password(
-			homeserver.text,
-			username.text,
-			password.text
-		):
-			get_tree().get_first_node_in_group(\"main\").loggedIn()
-			
-		)
-"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qigen"]
 shader = ExtResource("4_i3fcb")
@@ -46,7 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_0i4cu")
+script = ExtResource("1_gplff")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_qigen")
@@ -111,7 +89,7 @@ text = "homeserver:"
 [node name="homeserver" type="LineEdit" parent="Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "matrix.org"
+text = "matrix.pupper.dev"
 placeholder_text = "matrix.org"
 expand_to_text_length = true
 
