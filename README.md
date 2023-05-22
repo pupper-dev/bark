@@ -4,8 +4,9 @@ Godot matrix client with VR support (WIP)
 ## the goal
 
 My goal is to create a matrix client designed specifically to rival both Discord and social VR apps (like VRChat, Neos, etc.)
-Open source from the start, using matrix, and will provide thorough documentation on features/changes. 
-Facilitates work on my "vector_sdk" a godot SDK to make it easier to implement matrix into games. This will eventually be accompanied by a solution I'm architecting for various methods of indie devs to host their games on MMMat.
+Open source from the start, using matrix, and will provide thorough documentation on features/changes.
+
+Facilitates work on my "vector_sdk" a godot SDK to make it easier to implement matrix into games. This will eventually be accompanied by a solution I'm architecting for various methods of indie devs to host their games on Matrix.
 
 
 
