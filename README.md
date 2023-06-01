@@ -1,6 +1,10 @@
 # bark
 Godot matrix client with VR support (WIP)
 
+This repo currently holds the Matrix client only, the VR work is at another repo for now to reduce the size of the initial release of bark as a matrix client while we make progress on both main segments of the app.
+
+https://github.com/zodywoolsey/ptb
+
 ## the goal
 
 My goal is to create a matrix client designed specifically to rival both Discord and social VR apps (like VRChat, Neos, etc.)
