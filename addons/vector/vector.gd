@@ -49,6 +49,7 @@ func _ready():
 		saveUserDict()
 		if userToken != "":
 			headers.push_back("Authorization: Bearer {0}".format([userToken]))
+			print(headers)
 			user_logged_in.emit()
 			return true
 		else:

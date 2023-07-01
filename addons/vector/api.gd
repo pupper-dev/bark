@@ -26,6 +26,7 @@ signal posted_register_msisdn_requesttoken(result:int,response_code:int,headers:
 signal user_logged_in(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray)
 signal got_joined_rooms(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray)
 signal got_room_state(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray)
+signal got_room_messages(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray)
 signal synced(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray)
 
 ## GET /.well-known/matrix/client
@@ -605,6 +606,48 @@ func post_register_msisdn_requesttoken(base_url:String='', headers:Array=[], cli
 	str(bodyDict)
 	)
 
+## GET /_matrix/client/v3/rooms/{roomId}/messages
+## accepts: {roomId:String:fp, dir:String:qp, filter:String:qp, from:String:qp, limit:int:qp, to:String:qp}
+## https://spec.matrix.org/v1.7/client-server-api/#get_matrixclientv3roomsroomidmessages
+func get_room_messages(base_url:String='', headers:Array=[], roomId: String = '', dir: String = '', filter:String = '', from:String = '', limit:int = -99, to:String = ''):
+	assert(roomId=='',"get_room_messages: roomId is required")
+	if dir == '':
+		dir = 'b'
+	if headers.is_empty():
+		push_warning("get_room_messages: headers are required to be set for this call, due to authentication requirements")
+	var res
+	var client = HTTPRequest.new()
+	print("getting room_messages for: ",roomId)
+	client.use_threads = false
+	Vector.requestParent.add_child(client)
+	client.request_completed.connect(func(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray):
+		# if result == RESULT_SUCCESS, emit signal
+		if result == HTTPRequest.RESULT_SUCCESS:
+			got_room_messages.emit(result,response_code,headers,body)
+		else:
+			print("error getting room_messages:\n	result: {0}\n	response_code: {1}\n".format([result,response_code]))
+		client.queue_free()
+		)
+	# build request body with provided info
+	var bodyDict = {}
+	if dir!='':
+		bodyDict["dir"] = dir
+	if filter!='':
+		bodyDict["filter"] = filter
+	if from!='':
+		bodyDict["from"] = from
+	if limit!=-99:
+		bodyDict["limit"] = limit
+	if to!='':
+		bodyDict["to"] = to
+	# make request
+	res = client.request(
+	base_url+"_matrix/client/v3/rooms/"+roomId+"/messages",
+	headers,
+	HTTPClient.METHOD_GET,
+	str(bodyDict)
+	)
+	
 
 
 
@@ -719,15 +762,15 @@ func get_room_state(room_id:String):
 	
 ## Gets a list of message and state events for a room. It uses pagination query parameters to paginate history in the room.
 ## Url: /_matrix/client/v3/rooms/{roomId}/messages
-func get_room_messages(room_id:String, dir:String='', filter:String='',from:String='', limit:int=-1, to:String=''):
-	var res
-	if Vector.client.get_status() == HTTPClient.STATUS_CONNECTED:
-		res = Vector.client.request(HTTPClient.METHOD_GET, "/_matrix/client/v3/rooms/{0}/messages?limit={1}".format([
-			room_id,
-			limit if limit<-1 else 100
-			]),Vector.headers)
-		var msg = await Vector.readRequestBytes()
-		return JSON.parse_string(msg)
+#func get_room_messages(room_id:String, dir:String='', filter:String='',from:String='', limit:int=-1, to:String=''):
+#	var res
+#	if Vector.client.get_status() == HTTPClient.STATUS_CONNECTED:
+#		res = Vector.client.request(HTTPClient.METHOD_GET, "/_matrix/client/v3/rooms/{0}/messages?limit={1}".format([
+#			room_id,
+#			limit if limit<-1 else 100
+#			]),Vector.headers)
+#		var msg = await Vector.readRequestBytes()
+#		return JSON.parse_string(msg)
 	
 ## Gets a list of aliases for the specified room
 ## Url: /_matrix/client/v3/rooms/{roomId}/aliases

@@ -12,6 +12,7 @@ func _ready():
 #		Vector.sync()
 		)
 	if await Vector.readUserDict():
+		print(Vector.headers)
 		loggedIn()
 
 

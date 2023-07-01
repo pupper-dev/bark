@@ -31,5 +31,5 @@ func login():
 			username.text,
 			password.text
 		):
-			get_tree().get_first_node_in_group("main").loggedIn()
+			pass
 	
