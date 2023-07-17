@@ -24,7 +24,8 @@ Facilitates work on my "vector_sdk" a godot SDK to make it easier to implement m
 - custom rooms with dedicated ui
 - cross compat with Element calls (hopefully)
 - special calls for bark users (VR, e2e group calls, etc)
-- Launch modes for flat, VR, AR, MR
+- Launch modes for flat, XR
+- matrix admin console
 
 
 # community features
