@@ -125,7 +125,7 @@ func saveUserDict():
 
 func readUserDict():
 	var file = FileAccess.open("user://user.data",FileAccess.READ)
-	if file.file_exists("user://user.data"):
+	if file:
 		var read = file.get_var()
 		read.reverse()
 		userData = bytes_to_var(read)
