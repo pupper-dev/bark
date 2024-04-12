@@ -1,5 +1,5 @@
 # bark
-Godot matrix client with VR support (WIP)
+Godot matrix client (WIP)
 
 This is the flat client repo, this currently does not work but will be updated soon. 
 
